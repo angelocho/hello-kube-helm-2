@@ -1,0 +1,18 @@
+﻿{{- range $key, $value := .Values.service }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels: 
+    {{- include "mychart.labels" . | nindent 4 }}
+  name: "{{ $value.appname }}"
+spec:
+  ports:
+  - name: {{ $value.portname }}
+    port: {{ $value.port | default "80" }}
+    protocol: TCP
+    targetPort: {{ $value.targetPort }}
+  selector:
+    app: {{ $value.appname }}
+  type: {{ .type }}
+{{ end }}
