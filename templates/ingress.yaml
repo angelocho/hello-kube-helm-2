@@ -1,27 +1,12 @@
+{{ if .Values.ingress.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mi-ingress
 spec:
-  ingressClassName: nginx
+  ingressClassName: {{ .Values.ingress.ClassName }}
   rules:
-    - host: mi-nginx.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: hello-world-nginx
-                port:
-                  number: 80
-    - host: mi-httpd.com
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: hello-world-httpd
-                port:
-                  number: 80
+  {{- with .Values.ingress.hosts }}
+  {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{ end }}
